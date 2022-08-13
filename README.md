@@ -8,7 +8,11 @@ If you're using Bash run
 ```
 Otherwise use your favourite C compiler.
 
+## Requirements
+This program uses Linux and Bash specific functionality, so it's not expected to work elsewhere.
+
 ## Usage
+Ensure that the ```words.txt``` file is in the same directory as the program.
 Run
 ```
 ./monkeytyper <wordCount>
