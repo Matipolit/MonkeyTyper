@@ -2,7 +2,7 @@
 A simple Monkeytype CLI clone for measuring typing speed without leaving the terminal.
 
 ## Building
-If you're using Bash run
+If you're using Bash and have GCC installed run
 ```
 ./build.sh
 ```
