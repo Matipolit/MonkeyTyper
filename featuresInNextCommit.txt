@@ -1,0 +1,2 @@
+escape key prompt and stats while typing
+new color system
