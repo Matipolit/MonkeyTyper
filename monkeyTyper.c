@@ -9,6 +9,16 @@
 #define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
 #define clear() printf("\033[H\033[J")
 
+//colors
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGRN  "\x1B[32m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KMAG  "\x1B[35m"
+#define KCYN  "\x1B[36m"
+#define KWHT  "\x1B[37m"
+
 int charCount;
 struct winsize w;
 
@@ -46,19 +56,6 @@ void slice( const char *str, char *result, size_t start, size_t end ) {
     strncpy(result, str + start, end - start);
 }
 
-void printColor( char c, char *color ){
-	char *setColor = "";
-	if(strcmp(color, "red")){
-		setColor="\033[0;32m";
-	}else if(strcmp(color, "green")){
-		setColor = "\033[0;31m";
-	}
-
-	printf("%s", setColor);
-	putchar(c);
-	printf("\033[0m");
-}
-
 void prepareForExit(){
 	system("/bin/stty echo"); // prints user input
 	system("/bin/stty cooked"); // gets user input with enter
@@ -70,15 +67,24 @@ void renderText( char *enteredText, char *sourceText, int numberOfEnteredCharact
 	int i;
 	for(i = 0; i<numberOfEnteredCharacters; i++){
 		if(sourceText[i]==enteredText[i]){
-			printColor(enteredText[i], "green");
+			printf(KGRN);
+			putchar(enteredText[i]);
+			printf(KNRM);
 		}else{
-			printColor(sourceText[i], "red");
+			printf(KRED);
+			putchar(enteredText[i]);
+			printf(KNRM);
 		}
 	}
 	while(i<charCount){
 		printf("%c", sourceText[i]);
 		i++;
 	}
+	printf(KBLU "| ");
+	printf(KCYN " %d Characters entered ", numberOfEnteredCharacters);
+	printf(KBLU "| ");
+	printf(KCYN " Press ESCAPE to exit program");
+	printf(KNRM);
 
 }
 
@@ -89,7 +95,7 @@ void renderCursor(int charNum){
 
 void printStats(int wordcount, double time){
 	prepareForExit();
-	printf("time taken: %f\n", time);
+	printf("time taken: %.1f seconds\n", time);
 	double wpm = wordcount*(60/time);
 	printf("Your average wpm: %.1f\n", wpm);
 }
@@ -161,7 +167,7 @@ int main( int argc, char *argv[] ){
 
 	system("clear");	
 
-	printf("%s", joinedWords);
+	//printf("%s", joinedWords);
 	
 	system("/bin/stty raw"); // gets user input without enter
 	system("/bin/stty -echo"); // doesn't print user input
@@ -171,6 +177,11 @@ int main( int argc, char *argv[] ){
 	int charNum = 0;
 	int columnNum = 0;
 	int rowNum = 0;
+
+	renderText(enteredChars, joinedWords, charNum);
+	printf(KBLU " | ");
+	printf(KCYN "Start typing to begin test");
+	printf(KNRM);
 
 	gotoxy(0,0);
 	struct timespec begin, end;
