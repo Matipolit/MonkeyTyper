@@ -179,6 +179,9 @@ int main( int argc, char *argv[] ){
 	int rowNum = 0;
 
 	renderText(enteredChars, joinedWords, charNum);
+	printf(KBLU " | ");
+	printf(KCYN "Start typing to begin test");
+	printf(KNRM);
 
 	gotoxy(0,0);
 	struct timespec begin, end;
