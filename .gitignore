@@ -1,7 +1,10 @@
 monkeyTyper
 monkeyTyperDebug
+monkeyTyper_arm64
+monkeyTyper_x86
 timerTest
 timerTest.c
 todos.txt
 .vscode/
 tools/
+build/
