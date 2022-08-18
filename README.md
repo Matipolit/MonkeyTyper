@@ -20,5 +20,6 @@ Run
 Where ```wordcount``` is the length of the typing test in words. After you type the whole text the elapsed time and WPM speed will be displayed.  
 To exit the program at any time press the escape key, **don't kill the program as it will leave your shell unusable by disabling the cursor and typed text.**
 
-## Custom wordlists
-Just replace the contents of ```words.txt``` with a wordlist of your choosing, one word per line.
+## TODOs
+- [ ] Custom wordlists
+- [ ] Accuracy %
