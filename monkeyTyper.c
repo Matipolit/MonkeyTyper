@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 #define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
 #define clear() printf("\033[H\033[J")
@@ -61,6 +62,21 @@ void prepareForExit(){
 	system("/bin/stty cooked"); // gets user input with enter
 	system("clear");
 }
+int countLinesInFile(FILE *fptr){
+    char ch = ' ';
+    int lines = 0;
+    while(!feof(fptr)){
+        ch = fgetc(fptr);
+        if(ch == '\n'){
+            lines++;
+        }
+    }
+    return lines;
+}
+
+void lowerStr(char *p){
+    for ( ; *p; ++p) *p = tolower(*p);
+}
 
 void renderText( char *enteredText, char *sourceText, int numberOfEnteredCharacters ){
 	system("clear");
@@ -115,7 +131,6 @@ int main( int argc, char *argv[] ){
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t read;
-	const int TOTAL_WORDS = 466550;
 
 	char words[wordCount][46];
 	int randomInts[wordCount];
@@ -126,19 +141,26 @@ int main( int argc, char *argv[] ){
 
 	// Terminal size w.ws_row, w.ws_col
   	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-
+    
 	srand(time(NULL));
+
+	fptr = fopen("words.txt", "r");
+    int totalWords = countLinesInFile(fptr);
+    rewind(fptr);
+    if(totalWords<wordCount){
+        printf("Provided word count is bigger than the words.txt file.\nWord count must be at most as long as the line count in that file.\n");
+        return 1;
+    }
 
 	initArrMinus(randomInts, wordCount);
 	initArrMinus(wordOrder, wordCount);
-	generateRandomInts(randomInts, wordCount, 0, TOTAL_WORDS);
+	generateRandomInts(randomInts, wordCount, 0, totalWords);
 	generateRandomInts(wordOrder, wordCount, 0, wordCount);
 
 	int currLine = 0;
 	int currWord = 0;
 
 
-	fptr = fopen("words.txt", "r");
 	while((read = getline( &line, &len, fptr )) != -1){
 		if(intInArr(currLine, randomInts, wordCount)){
 			int length = strlen(line);
@@ -158,6 +180,7 @@ int main( int argc, char *argv[] ){
 	memset( enteredChars, 0, charCount * sizeof(char) );
 	
 	for(int i=0; i<wordCount; i++){
+	    lowerStr(words[i]);
 		strcat(joinedWords, words[i]);
 		strcat(joinedWords, " ");
 
